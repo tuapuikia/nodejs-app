@@ -28,8 +28,9 @@ node {
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
+        GIT_COMMIT_HASH = sh (script: "git log -n 1 --pretty=format:'%H'", returnStdout: true)
         docker.withRegistry('https://393360539243.dkr.ecr.us-east-1.amazonaws.com', 'ecr:us-east-1:credential-id') {
-            app.push("${env.BUILD_NUMBER}")
+            app.push("${GIT_COMMIT_HASH}")
             app.push("latest")
         }
     }
